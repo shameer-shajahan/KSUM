@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Submitted</title>
+</head>
+<body>
+    <h2>{{ message }}</h2>
+    <p>Your form is now under review. Once approved, it will be processed further.</p>
+    <a href="{% url 'yipform_create' %}">Submit another form</a>
+</body>
+</html>
