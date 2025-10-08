@@ -1,5 +1,5 @@
 from django import forms
-from .models import YipForm, CustomerModel
+from .models import YipForm, AdminModel
 
 class YipFormForm(forms.ModelForm):
     class Meta:
@@ -19,15 +19,17 @@ class YipFormForm(forms.ModelForm):
         return resume
 
 
-
-class CustomerCreateForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput)  # input password
-
+class AdminModelForm(forms.ModelForm):
     class Meta:
-        model = CustomerModel
-        fields = ['full_name', 'email', 'phone', 'password']
+        model = AdminModel
+        fields = ['full_name', 'email', 'phone']
 
 
+
+
+class AdminLoginForm(forms.Form):
+    email = forms.EmailField()
+    password = forms.CharField(widget=forms.PasswordInput)
 
 
 

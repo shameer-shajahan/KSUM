@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
-
+from .models import YipForm, AdminModel
 from .forms import YipFormForm
 from django.contrib import messages
-
+from .models import AdminModel
+from .forms import AdminLoginForm
 from django.contrib.auth import logout as auth_logout 
 import razorpay
 from django.conf import settings
@@ -62,5 +63,43 @@ def yipform_list(request):
     yipforms = YipForm.objects.all()
     return render(request, 'yipform_list.html', {'yipforms': yipforms})
 
+
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import AdminModel
+from .forms import AdminLoginForm
+
+
+def admin_login(request):
+    if request.method == 'POST':
+        form = AdminLoginForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+
+            try:
+            
+                admin = AdminModel.objects.get(email=email, password=password)
+  
+                request.session['admin_id'] = admin.id
+                request.session['admin_name'] = admin.full_name
+                return redirect('admin_dashboard')
+            except AdminModel.DoesNotExist:
+                messages.error(request, 'Invalid email or password.')
+    else:
+        form = AdminLoginForm()
+    return render(request, 'admin_login.html', {'form': form})
+
+
+
+def admin_logout(request):
+    request.session.flush()  
+    return redirect('admin_login')
+
+
+def admin_dashboard(request):
+    if not request.session.get('admin_id'):
+        return redirect('admin_login')
+    return render(request, 'admin_dashboard.html', {'admin_name': request.session.get('admin_name')})
 
 
